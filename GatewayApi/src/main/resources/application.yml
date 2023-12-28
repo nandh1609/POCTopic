@@ -1,0 +1,63 @@
+#
+#eureka:
+#  instance:
+#    client:
+#      serviceUrl:
+#        defaultZone: http://localhost:8761/eureka/
+#server:
+#  port: 9191
+#spring:
+#  application:
+#    name: GATEWAY-API
+#  cloud:
+#    gateway:
+#      routes[0]:
+#        id: EMPLOYEE-SERVICE
+#        uri: http://localhost:8091
+#        predicates:
+#          -Path=/api/employees
+#      routes[1]:
+#          id: DEPARTMENT-SERVICE
+#          uri: http://localhost:8090
+#          predicates:
+#              -Path=/api/departments
+#
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: *
+#
+##Routes for Employee Service
+#
+
+
+spring:
+  application:
+    name: GATEWAY-API
+  cloud:
+    gateway:
+      routes:
+        - id: EMPLOYEE-SERVICE
+          uri: lb://EMPLOYEE-SERVICE
+          predicates:
+            - Path=/api/employees/**
+        - id: DEPARTMENT-SERVICE
+          uri: lb://DEPARTMENT-SERVICE
+          predicates:
+            - Path=/api/departments/**
+
+eureka:
+  instance:
+    client:
+      serviceUrl:
+        defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 9191
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
